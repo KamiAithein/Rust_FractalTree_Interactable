@@ -34,8 +34,8 @@ impl Tree{
         self.root.step(0, self.theta - PI/2.0, self.number, self.dt);
         self.is_generated = true;
     }
-    pub fn draw(&mut self, con: &Context, g: &mut G2d){
-        self.root.draw(con, g);
+    pub fn draw(&mut self, con: &Context, g: &mut G2d, dp: f32){
+        self.root.draw(con, g, 0, dp);
     }
     
 }
@@ -101,9 +101,20 @@ impl Node{
         self.add(child1);
         self.add(child2);
     }
-    pub fn draw(&mut self, con: &Context, g: &mut G2d){
+    pub fn draw(&mut self, con: &Context, g: &mut G2d, level: i32, dp: f32){
+        if self.point1.x < 1000 && self.point1.x > 0 &&
+        self.point2.x < 1000 && self.point2.x > 0 &&
+        self.point1.y < 1000 && self.point1.y > 0 &&
+        self.point2.y < 1000 && self.point2.y > 0
+        {
+            let sin = |x: f32, p: f32| -> f32{
+                0.5*((x*0.25 + p + dp).sin()) + 0.5
+            };
+            let dr = sin(level as f32, (3.0*PI/2.0) as f32);
+            let dg = sin(level as f32, (PI/2.0) as f32);
+            let db = sin(level as f32, 0.0);
             line(
-                [1.0,1.0,1.0,1.0],
+                [1.0*dr,1.0*dg,1.0*db,1.0],
                 1.0,
                 [
                     self.point1.x as f64,
@@ -114,9 +125,11 @@ impl Node{
                 con.transform,
                 g,
             );
-        for mut node in self.children.clone(){
-            node.draw(con, g);
+            for n in &mut self.children.clone(){
+                n.draw(con, g, level +1, dp);
+            }
         }
+
     }
 
 }

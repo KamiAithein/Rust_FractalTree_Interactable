@@ -7,3 +7,5 @@ edition = "2018"
 [dependencies]
 rand = "*"
 piston_window = "*"
+threadpool = "*"
+num_cpus = "*"
