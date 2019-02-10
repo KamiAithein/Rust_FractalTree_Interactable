@@ -1,0 +1,9 @@
+[package]
+name = "play_ground"
+version = "0.1.0"
+authors = ["KamiAithein <k3nnethwkoepcke@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+rand = "*"
+piston_window = "*"
